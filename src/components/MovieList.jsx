@@ -1,8 +1,11 @@
 import React from 'react'
+import { Text, View } from 'react-native'
 
-function MovieList() {
+function MovieList({title, data}) {
   return (
-    <div>MovieList</div>
+    <View>
+      <Text>MovieList</Text>
+    </View>
   )
 }
 

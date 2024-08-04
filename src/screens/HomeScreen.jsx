@@ -6,10 +6,13 @@ import { Bars3CenterLeftIcon, MagnifyingGlassIcon } from 'react-native-heroicons
 import { ScrollView } from 'react-native';
 import TrendingMovies from '../components/TrendingMovies';
 import { useState } from 'react';
+import MovieList from '../components/MovieList';
 
 function HomeScreen() {
 
   const [trending, setTrending] = useState([1, 2, 3]);
+  const [upcoming, setUpcoming] = useState([1, 2, 3]);
+  const [topRated, setTopRated] = useState([1, 2, 3]);
 
   return (
     <View style={styles.container}>
@@ -31,6 +34,8 @@ function HomeScreen() {
         
         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{paddingBottom: 10}}>
           <TrendingMovies data={trending} />
+
+          <MovieList title='Upcoming Movies' data={upcoming} />
         </ScrollView>
 
     </View>
