@@ -14,7 +14,7 @@ function MovieList({title, data}) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={{color: 'white', fontSize: 20}}>Upcoming</Text>
+        <Text style={{color: 'white', fontSize: 20}}>{title}</Text>
         <TouchableOpacity>
           <Text style={{color: '#eab308'}}>See All</Text>
         </TouchableOpacity>
@@ -25,7 +25,7 @@ function MovieList({title, data}) {
             <TouchableWithoutFeedback key={index} onPress={() => navigation.navigate('Movie', item)}>
                 <View style={styles.movieCard}>
                   <Image source={starWarsImage} style={styles.imageCard} />
-                  <Text>{movieName}</Text>
+                  <Text style={{color: 'white'}}>{movieName.length > 14 ? movieName.slice(0, 14)+'...' : movieName}</Text>
                 </View>
             </TouchableWithoutFeedback>
           )

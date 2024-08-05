@@ -36,6 +36,8 @@ function HomeScreen() {
           <TrendingMovies data={trending} />
 
           <MovieList title='Upcoming Movies' data={upcoming} />
+
+          <MovieList title='Top Rated Movies' data={topRated} />
         </ScrollView>
 
     </View>

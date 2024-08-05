@@ -11,8 +11,8 @@ function TrendingMovies({ data }) {
 
   const navigation = useNavigation();
 
-  const handleClick = () => {
-    // navigation.navigate('Movie', item)
+  const handleClick = (item) => {
+    navigation.navigate('Movie', item)
   }
 
   return (
@@ -33,7 +33,7 @@ function TrendingMovies({ data }) {
 
 const MovieCard = ({ item, handleClick }) => {
   return (
-    <TouchableWithoutFeedback onPress={handleClick}>
+    <TouchableWithoutFeedback onPress={() => handleClick(item)}>
       <View style={styles.card}>
         <Image
           source={starWarsImage}
