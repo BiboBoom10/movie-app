@@ -5,6 +5,7 @@ import { Dimensions, Image, Platform, SafeAreaView, ScrollView, StyleSheet, Text
 import { ChevronLeftIcon } from 'react-native-heroicons/outline';
 import { HeartIcon } from 'react-native-heroicons/solid';
 import { LinearGradient } from 'expo-linear-gradient';
+import Cast from '../components/Cast';
 
 const { width, height } = Dimensions.get('window');
 
@@ -18,6 +19,7 @@ function MovieScreen() {
   const navigation = useNavigation();
 
   const [favorite, setFavorite] = useState(false);
+  const [cast, setCast] = useState([1, 2, 3]);
 
   useEffect(() => {
     // Effect hook to handle updates based on item
@@ -39,16 +41,33 @@ function MovieScreen() {
         <View style={{marginTop: 16}}>
           <Image source={require('../../assets/starwars.jpg')} style={styles.imageStyle} />
           <LinearGradient 
-            colors={['transparent', 'rgba(10,10,10,0.9)', 'rgba(23,23,23,1)']}
+            colors={['transparent', 'rgba(20,20,20,0.8)', 'rgba(32,32,32,1)']}
             style={styles.gradientStyle}
             start={{x: 0.5, y: 0}}
             end={{x: 0.5, y: 1}}
           />
         </View>
 
-        <View style={styles.movieDescription}>
+        <View style={styles.movieTitle}>
           <Text style={styles.movieHeading}>{movieName}</Text>
         </View>
+
+        <Text style={{color: 'gray', textAlign: 'center'}}>Realeased . 2020 . 120 min </Text>
+
+        <View style={styles.categories}>
+          <Text style={styles.categoriesColor}>Action -</Text>
+          <Text style={styles.categoriesColor}>Thrill -</Text>
+          <Text style={styles.categoriesColor}>Comedy</Text>
+        </View>
+
+        <Text style={styles.description}>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque sagittis neque vel nisi tincidunt, condimentum maximus lorem volutpat. 
+        Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. 
+        Sed et tempus dolor. Aliquam sagittis varius bibendum. Integer ornare mattis blandit. Sed semper vel ipsum eget bibendum. 
+        Integer tempor arcu finibus neque lacinia placerat. Phasellus dictum ligula eu sapien placerat elementum.
+        </Text>
+
+        <Cast cast={cast} />
 
       </ScrollView>
     </SafeAreaView>
@@ -86,13 +105,34 @@ scrollViewContent: {
       position: 'absolute',
       bottom: 0
     },
-    movieDescription: {
-      marginTop: height * -(0.1)
+    movieTitle: {
+      marginTop: height * -(0.1),
     },
     movieHeading: {
-      fontSize: 32,
+      fontSize: 40,
       color: 'white',
       textAlign: 'center',
-      fontWeight: 'bold'
+      fontWeight: 'bold',
+      marginBottom: 8
+    },
+    categories: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'center',
+      marginHorizontal: 8,
+      gap: 4,
+      marginTop: 8
+    },
+    categoriesColor: {
+      color: '#9CA3AF',
+      fontSize: 18
+    },
+    description: {
+      letterSpacing: 1,
+      fontSize: 16,
+      color: 'white',
+      margin: 8,
+      textAlign: 'center',
+      fontWeight: '300'
     }
 });
