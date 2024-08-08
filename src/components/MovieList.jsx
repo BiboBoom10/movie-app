@@ -5,7 +5,7 @@ import starWarsImage from '../../assets/starwars.jpg';
 
 const { height, width } = Dimensions.get('window');
 
-function MovieList({title, data}) {
+function MovieList({title, data, hideSeeAll}) {
 
   let movieName = 'Ant Man';
 
@@ -15,14 +15,18 @@ function MovieList({title, data}) {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={{color: 'white', fontSize: 20}}>{title}</Text>
-        <TouchableOpacity>
-          <Text style={{color: '#eab308'}}>See All</Text>
-        </TouchableOpacity>
+        {
+          !hideSeeAll && (
+            <TouchableOpacity>
+              <Text style={{color: '#eab308'}}>See All</Text>
+            </TouchableOpacity>
+          )
+        }
       </View>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{paddingHorizontal: 16}}>
         {data.map((item, index) => {
           return (
-            <TouchableWithoutFeedback key={index} onPress={() => navigation.navigate('Movie', item)}>
+            <TouchableWithoutFeedback key={index} onPress={() => navigation.push('Movie', item)}>
                 <View style={styles.movieCard}>
                   <Image source={starWarsImage} style={styles.imageCard} />
                   <Text style={{color: 'white'}}>{movieName.length > 14 ? movieName.slice(0, 14)+'...' : movieName}</Text>

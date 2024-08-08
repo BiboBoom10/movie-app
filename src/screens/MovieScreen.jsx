@@ -6,6 +6,7 @@ import { ChevronLeftIcon } from 'react-native-heroicons/outline';
 import { HeartIcon } from 'react-native-heroicons/solid';
 import { LinearGradient } from 'expo-linear-gradient';
 import Cast from '../components/Cast';
+import MovieList from '../components/MovieList';
 
 const { width, height } = Dimensions.get('window');
 
@@ -19,7 +20,8 @@ function MovieScreen() {
   const navigation = useNavigation();
 
   const [favorite, setFavorite] = useState(false);
-  const [cast, setCast] = useState([1, 2, 3]);
+  const [cast, setCast] = useState([1, 2, 3, 4, 5, 6]);
+  const [similarMovies, setSimilarMovies] = useState([1, 2, 3]);
 
   useEffect(() => {
     // Effect hook to handle updates based on item
@@ -67,7 +69,9 @@ function MovieScreen() {
         Integer tempor arcu finibus neque lacinia placerat. Phasellus dictum ligula eu sapien placerat elementum.
         </Text>
 
-        <Cast cast={cast} />
+        <Cast navigation={navigation} cast={cast} />
+
+        <MovieList title='Similar Movies' hideSeeAll={true} data={similarMovies } />
 
       </ScrollView>
     </SafeAreaView>
@@ -129,7 +133,7 @@ scrollViewContent: {
     },
     description: {
       letterSpacing: 1,
-      fontSize: 16,
+      fontSize: 14,
       color: 'white',
       margin: 8,
       textAlign: 'center',
