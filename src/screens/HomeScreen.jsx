@@ -7,12 +7,15 @@ import { ScrollView } from 'react-native';
 import TrendingMovies from '../components/TrendingMovies';
 import { useState } from 'react';
 import MovieList from '../components/MovieList';
+import { useNavigation } from '@react-navigation/native';
 
 function HomeScreen() {
 
   const [trending, setTrending] = useState([1, 2, 3]);
   const [upcoming, setUpcoming] = useState([1, 2, 3]);
   const [topRated, setTopRated] = useState([1, 2, 3]);
+
+  const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
@@ -26,7 +29,7 @@ function HomeScreen() {
               <Text style={{fontSize: 24, color: '#eab308'}}>M</Text>
               ovies
             </Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('Search')} >
               <MagnifyingGlassIcon size={28} color='white' strokeWidth={2} />
             </TouchableOpacity>
           </View>
