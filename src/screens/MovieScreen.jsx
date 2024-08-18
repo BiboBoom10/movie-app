@@ -10,7 +10,7 @@ import MovieList from '../components/MovieList';
 
 const { width, height } = Dimensions.get('window');
 
-const ios = Platform.OS == 'ios';
+const ios = Platform.OS === 'ios';
 
 const movieName = 'Ant Man'
 
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
-scrollViewContent: {
+    scrollViewContent: {
         paddingTop: 50, 
     },
     header: {

@@ -28,7 +28,7 @@ function MovieList({title, data, hideSeeAll}) {
           return (
             <TouchableWithoutFeedback key={index} onPress={() => navigation.push('Movie', item)}>
                 <View style={styles.movieCard}>
-                  {/* <Image source={starWarsImage} style={styles.imageCard} /> */}
+                  <Image source={starWarsImage} style={styles.imageCard} />
                   <Text style={{color: 'white'}}>{movieName.length > 14 ? movieName.slice(0, 14)+'...' : movieName}</Text>
                 </View>
             </TouchableWithoutFeedback>
