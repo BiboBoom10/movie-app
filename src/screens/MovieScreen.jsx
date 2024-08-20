@@ -8,6 +8,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import Cast from '../components/Cast';
 import MovieList from '../components/MovieList';
 import Loading from '../components/Loading';
+import { fallbackMoviePoster, fetchMovieCredits, fetchMovieDetails, fetchSimilarMovies, image500 } from '../../api/moviedb';
 
 const { width, height } = Dimensions.get('window');
 
@@ -21,12 +22,40 @@ function MovieScreen() {
   const navigation = useNavigation();
 
   const [favorite, setFavorite] = useState(false);
-  const [cast, setCast] = useState([1, 2, 3, 4, 5, 6]);
-  const [similarMovies, setSimilarMovies] = useState([1, 2, 3]);
+  const [cast, setCast] = useState([]);
+  const [similarMovies, setSimilarMovies] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [movie, setMovie] = useState({});
+
+  const getMovieDetails = async (id) => {
+    const data = await fetchMovieDetails(id);
+    // console.log('Movie Details: ', data.id);
+    if(data) setMovie(data);
+    setLoading(false);
+  }
+
+  const getMovieCredits = async (id) => {
+    const data = await fetchMovieCredits(id);
+
+    if(data && data.cast) setCast(data.cast)
+  }
+
+  const getSimilarMovies = async (id) => {
+    const data = await fetchSimilarMovies(id);
+
+    if(data && data.results) setSimilarMovies(data.results);
+  }
 
   useEffect(() => {
-    // Effect hook to handle updates based on item
+    // console.log('Movie Item: ', item.id);
+    setLoading(true);
+
+    getMovieDetails(item.id);
+
+    getMovieCredits(item.id);
+
+    getSimilarMovies(item.id);
+
   }, [item]);
   
 
@@ -47,7 +76,7 @@ function MovieScreen() {
             <Loading />
           ) : (
             <View style={{marginTop: 16}}>
-            <Image source={require('../../assets/starwars.jpg')} style={styles.imageStyle} />
+            <Image source={{uri: image500(movie?.poster_path) || fallbackMoviePoster}} style={styles.imageStyle} />
             <LinearGradient 
               colors={['transparent', 'rgba(20,20,20,0.8)', 'rgba(32,32,32,1)']}
               style={styles.gradientStyle}
@@ -59,27 +88,34 @@ function MovieScreen() {
         }
 
         <View style={styles.movieTitle}>
-          <Text style={styles.movieHeading}>{movieName}</Text>
+          <Text style={styles.movieHeading}>{movie?.title}</Text>
         </View>
 
-        <Text style={{color: 'gray', textAlign: 'center'}}>Realeased . 2020 . 120 min </Text>
+        {
+          movie?.id? (
+            <Text style={{color: 'gray', textAlign: 'center'}}>{movie?.status} . {movie?.release_date?.split('-')[0]} . {movie?.runtime} min </Text>
+          ) : null
+        }
 
         <View style={styles.categories}>
-          <Text style={styles.categoriesColor}>Action -</Text>
-          <Text style={styles.categoriesColor}>Thrill -</Text>
-          <Text style={styles.categoriesColor}>Comedy</Text>
+          {
+            movie?.genres?.map((genre, index) => {
+              let showDash = index + 1 != movie.genres.length;
+              return(
+                <Text key={index} style={styles.categoriesColor}>{genre?.name} {showDash ? '-': null}</Text>
+              )
+            })
+          }
+          
         </View>
 
         <Text style={styles.description}>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque sagittis neque vel nisi tincidunt, condimentum maximus lorem volutpat. 
-        Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. 
-        Sed et tempus dolor. Aliquam sagittis varius bibendum. Integer ornare mattis blandit. Sed semper vel ipsum eget bibendum. 
-        Integer tempor arcu finibus neque lacinia placerat. Phasellus dictum ligula eu sapien placerat elementum.
+          {movie.overview}
         </Text>
 
         <Cast navigation={navigation} cast={cast} />
 
-        <MovieList title='Similar Movies' hideSeeAll={true} data={similarMovies } />
+        <MovieList title='Similar Movies' hideSeeAll={true} data={similarMovies} />
 
       </ScrollView>
     </SafeAreaView>
@@ -97,7 +133,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     scrollViewContent: {
-        paddingTop: 50, 
+        // paddingTop: 50, 
     },
     header: {
         width: '100%',
@@ -105,11 +141,11 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingHorizontal: 8,
-        marginTop: Platform.OS === ios ? 0 : 15
+        marginTop: Platform.OS === ios ? 0 : 15,
     },
     imageStyle: {
       width: width,
-      height: height * 0.5,
+      height: height * 0.6,
     },
     gradientStyle: {
       height: height * 0.4,

@@ -8,6 +8,7 @@ import { ChevronLeftIcon } from 'react-native-heroicons/outline';
 import { HeartIcon } from 'react-native-heroicons/solid';
 import MovieList from '../components/MovieList';
 import Loading from '../components/Loading';
+import { useEffect } from 'react';
 
 const { height, width } = Dimensions.get('window');
 
@@ -17,11 +18,17 @@ const personName = 'Ant Man'
 
 function PersonScreen() {
 
+    const { params: item } = useRoute();
+
     const navigation = useNavigation();
 
     const [favorite, setFavorite] = useState(false);
     const [personMovies, setPersonMovies] = useState([1, 2, 3]);
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+      
+    }, [item])
 
     return (
       <ScrollView style={styles.container}>

@@ -9,15 +9,47 @@ import { useState } from 'react';
 import MovieList from '../components/MovieList';
 import { useNavigation } from '@react-navigation/native';
 import Loading from '../components/Loading';
+import { useEffect } from 'react';
+import { fetchTopRatedMovies, fetchTrendingMovies, fetchUpcomingMovies } from '../../api/moviedb';
 
 function HomeScreen() {
 
-  const [trending, setTrending] = useState([1, 2, 3]);
-  const [upcoming, setUpcoming] = useState([1, 2, 3]);
-  const [topRated, setTopRated] = useState([1, 2, 3]);
-  const [loading, setLoading] = useState(false);
+  const [trending, setTrending] = useState([]);
+  const [upcoming, setUpcoming] = useState([]);
+  const [topRated, setTopRated] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const navigation = useNavigation();
+
+  useEffect(() => {
+    getTrendingMovies();
+    getUpcomingMovies();
+    getTopRatedMovies();
+  }, [])
+
+  const getTrendingMovies = async () => {
+    const data = await fetchTrendingMovies();
+    // console.log('Got trending movies', data);
+
+    if(data && data.results) setTrending(data.results);
+    setLoading(false);
+  }
+
+  const getUpcomingMovies = async () => {
+    const data = await fetchUpcomingMovies();
+    // console.log('Got upcoming movies', data);
+
+    if(data && data.results) setUpcoming(data.results);
+    // setLoading(false);
+  }
+
+  const getTopRatedMovies = async () => {
+    const data = await fetchTopRatedMovies();
+    // console.log('Get top rated movies', data);
+
+    if(data && data.results) setTopRated(data.results);
+    setLoading(false);
+  }
 
   return (
     <View style={styles.container}>
@@ -41,7 +73,7 @@ function HomeScreen() {
           <Loading />
         ) : (
           <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{paddingBottom: 10}}>
-          <TrendingMovies data={trending} />
+          { trending.length > 0 && <TrendingMovies data={trending} />}
 
           <MovieList title='Upcoming Movies' data={upcoming} />
 
@@ -71,7 +103,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginHorizontal: 8,
-    marginVertical: 8
+    marginHorizontal: 16,
+    marginTop: 8
   }
 });
