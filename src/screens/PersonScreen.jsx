@@ -7,6 +7,7 @@ import { Dimensions, Platform, ScrollView, Text } from 'react-native'
 import { ChevronLeftIcon } from 'react-native-heroicons/outline';
 import { HeartIcon } from 'react-native-heroicons/solid';
 import MovieList from '../components/MovieList';
+import Loading from '../components/Loading';
 
 const { height, width } = Dimensions.get('window');
 
@@ -20,66 +21,104 @@ function PersonScreen() {
 
     const [favorite, setFavorite] = useState(false);
     const [personMovies, setPersonMovies] = useState([1, 2, 3]);
+    const [loading, setLoading] = useState(false);
 
     return (
-        <ScrollView style={styles.container}>
-            <View style={styles.header}>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-                <ChevronLeftIcon size={28} strokeWidth={2.5} color='white' />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => setFavorite(!favorite)}>
-                <HeartIcon size={30} color={favorite? 'red' : 'white'} />
-            </TouchableOpacity>
-            </View>
+      <ScrollView style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <ChevronLeftIcon size={28} strokeWidth={2.5} color="white" />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setFavorite(!favorite)}>
+            <HeartIcon size={30} color={favorite ? "red" : "white"} />
+          </TouchableOpacity>
+        </View>
 
+        {loading ? (
+          <Loading />
+        ) : (
+          <View>
             <View>
-                <View style={styles.imageContainer}>
-                    <View style={styles.imageResizer}>
-                        <Image style={styles.imageSize} source={require('../../assets/starwars.jpg')} />
-                    </View>
+              <View style={styles.imageContainer}>
+                <View style={styles.imageResizer}>
+                  <Image
+                    style={styles.imageSize}
+                    source={require("../../assets/starwars.jpg")}
+                  />
                 </View>
+              </View>
             </View>
 
             <View style={styles.movieTitle}>
-                <Text style={styles.movieHeading}>{personName}</Text>
-                <Text style={{color: 'gray'}}>London, United Kingdom</Text>
+              <Text style={styles.movieHeading}>{personName}</Text>
+              <Text style={{ color: "gray" }}>London, United Kingdom</Text>
             </View>
 
             <View style={styles.detailsContainer}>
-                <View style={{borderRightWidth: 2, borderRightColor: '#9CA3AF', paddingHorizontal: 16}}>
-                    <Text style={{fontWeight: 'bold', color: '#D1D5DB'}}>Gender</Text>
-                    <Text style={{color: '#D1D5DB'}}>Male</Text>
-                </View>
-                <View style={{borderRightWidth: 2, borderRightColor: '#9CA3AF', paddingHorizontal: 16}}>
-                    <Text style={{fontWeight: 'bold', color: '#D1D5DB'}}>Birthday</Text>
-                    <Text style={{color: '#D1D5DB'}}>2002-01-01</Text>
-                </View>
-                <View style={{borderRightWidth: 2, borderRightColor: '#9CA3AF', paddingHorizontal: 16}}>
-                    <Text style={{fontWeight: 'bold', color: '#D1D5DB'}}>Known For</Text>
-                    <Text style={{color: '#D1D5DB'}}>Acting</Text>
-                </View>
-                <View style={{paddingHorizontal: 16}}>
-                    <Text style={{fontWeight: 'bold', color: '#D1D5DB'}}>Popularity</Text>
-                    <Text style={{color: '#D1D5DB'}}>54,000</Text>
-                </View>
+              <View
+                style={{
+                  borderRightWidth: 2,
+                  borderRightColor: "#9CA3AF",
+                  paddingHorizontal: 16,
+                }}
+              >
+                <Text style={{ fontWeight: "bold", color: "#D1D5DB" }}>
+                  Gender
+                </Text>
+                <Text style={{ color: "#D1D5DB" }}>Male</Text>
+              </View>
+              <View
+                style={{
+                  borderRightWidth: 2,
+                  borderRightColor: "#9CA3AF",
+                  paddingHorizontal: 16,
+                }}
+              >
+                <Text style={{ fontWeight: "bold", color: "#D1D5DB" }}>
+                  Birthday
+                </Text>
+                <Text style={{ color: "#D1D5DB" }}>2002-01-01</Text>
+              </View>
+              <View
+                style={{
+                  borderRightWidth: 2,
+                  borderRightColor: "#9CA3AF",
+                  paddingHorizontal: 16,
+                }}
+              >
+                <Text style={{ fontWeight: "bold", color: "#D1D5DB" }}>
+                  Known For
+                </Text>
+                <Text style={{ color: "#D1D5DB" }}>Acting</Text>
+              </View>
+              <View style={{ paddingHorizontal: 16 }}>
+                <Text style={{ fontWeight: "bold", color: "#D1D5DB" }}>
+                  Popularity
+                </Text>
+                <Text style={{ color: "#D1D5DB" }}>54,000</Text>
+              </View>
             </View>
 
             <View style={styles.bioContainer}>
+              <Text style={styles.bio}>Biography</Text>
 
-                <Text style={styles.bio}>Biography</Text>
-
-                <Text style={styles.description}>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque sagittis neque vel nisi tincidunt, condimentum maximus lorem volutpat. 
-                    Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. 
-                    Sed et tempus dolor. Aliquam sagittis varius bibendum. Integer ornare mattis blandit. Sed semper vel ipsum eget bibendum. 
-                    Integer tempor arcu finibus neque lacinia placerat. Phasellus dictum ligula eu sapien placerat elementum.
-                </Text>
+              <Text style={styles.description}>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                Pellentesque sagittis neque vel nisi tincidunt, condimentum
+                maximus lorem volutpat. Class aptent taciti sociosqu ad litora
+                torquent per conubia nostra, per inceptos himenaeos. Sed et
+                tempus dolor. Aliquam sagittis varius bibendum. Integer ornare
+                mattis blandit. Sed semper vel ipsum eget bibendum. Integer
+                tempor arcu finibus neque lacinia placerat. Phasellus dictum
+                ligula eu sapien placerat elementum.
+              </Text>
             </View>
 
-            <MovieList title={'Movies'} data={personMovies} hideSeeAll={true} />
-
-        </ScrollView>
-    )
+            <MovieList title={"Movies"} data={personMovies} hideSeeAll={true} />
+          </View>
+        )}
+      </ScrollView>
+    );
 }
 
 export default PersonScreen;
@@ -131,7 +170,7 @@ const styles = StyleSheet.create({
         marginBottom: 8
       },
       detailsContainer: {
-        marginHorizontal: 8,
+        marginHorizontal: 4,
         padding: 8,
         backgroundColor: '#363835',
         display: 'flex',
@@ -140,6 +179,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderWidth: 1,
         borderRadius: 200,
+        flexWrap: 'wrap'
       },
       bio: {
         textAlign: 'center',

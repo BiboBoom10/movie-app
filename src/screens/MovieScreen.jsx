@@ -7,6 +7,7 @@ import { HeartIcon } from 'react-native-heroicons/solid';
 import { LinearGradient } from 'expo-linear-gradient';
 import Cast from '../components/Cast';
 import MovieList from '../components/MovieList';
+import Loading from '../components/Loading';
 
 const { width, height } = Dimensions.get('window');
 
@@ -22,6 +23,7 @@ function MovieScreen() {
   const [favorite, setFavorite] = useState(false);
   const [cast, setCast] = useState([1, 2, 3, 4, 5, 6]);
   const [similarMovies, setSimilarMovies] = useState([1, 2, 3]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     // Effect hook to handle updates based on item
@@ -40,15 +42,21 @@ function MovieScreen() {
           </TouchableOpacity>
         </View>
 
-        <View style={{marginTop: 16}}>
-          <Image source={require('../../assets/starwars.jpg')} style={styles.imageStyle} />
-          <LinearGradient 
-            colors={['transparent', 'rgba(20,20,20,0.8)', 'rgba(32,32,32,1)']}
-            style={styles.gradientStyle}
-            start={{x: 0.5, y: 0}}
-            end={{x: 0.5, y: 1}}
-          />
-        </View>
+        {
+          loading ? (
+            <Loading />
+          ) : (
+            <View style={{marginTop: 16}}>
+            <Image source={require('../../assets/starwars.jpg')} style={styles.imageStyle} />
+            <LinearGradient 
+              colors={['transparent', 'rgba(20,20,20,0.8)', 'rgba(32,32,32,1)']}
+              style={styles.gradientStyle}
+              start={{x: 0.5, y: 0}}
+              end={{x: 0.5, y: 1}}
+            />
+            </View>
+          )
+        }
 
         <View style={styles.movieTitle}>
           <Text style={styles.movieHeading}>{movieName}</Text>
