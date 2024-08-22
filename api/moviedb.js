@@ -1,6 +1,8 @@
 import { API_KEY } from '@env';
 import axios from 'axios';
 
+// https://developer.themoviedb.org/reference/search-movie
+
 const apiBaseUrl = 'https://api.themoviedb.org/3';
 
 const trendingMovies = `${apiBaseUrl}/trending/movie/day?api_key=${API_KEY}`;
@@ -14,6 +16,12 @@ const movieDetails = id => `${apiBaseUrl}/movie/${id}?api_key=${API_KEY}`;
 const movieCredits = id => `${apiBaseUrl}/movie/${id}/credits?api_key=${API_KEY}`;
 
 const similarMovies = id => `${apiBaseUrl}/movie/${id}/similar?api_key=${API_KEY}`;
+
+const personDetails = id => `${apiBaseUrl}/person/${id}?api_key=${API_KEY}`;
+
+const personMovies = id => `${apiBaseUrl}/person/${id}/movie_credits?api_key=${API_KEY}`;
+
+const searchMovie = `${apiBaseUrl}/search/movie?api_key=${API_KEY}`
 
 export const image500 = path => path? `https://image.tmdb.org/t/p/w500${path}` : null;
 export const image342 = path => path? `https://image.tmdb.org/t/p/w342${path}` : null;
@@ -60,4 +68,16 @@ export const fetchMovieCredits = (id) => {
 
 export const fetchSimilarMovies = (id) => {
     return apiCall(similarMovies(id));
+}
+
+export const fetchPersonDetails = (id) => {
+    return apiCall(personDetails(id));
+}
+
+export const fetchPersonMovies = (id) => {
+    return apiCall(personMovies(id));
+}
+
+export const fetchSearchedMovie = (params) => {
+    return apiCall(searchMovie, params)
 }

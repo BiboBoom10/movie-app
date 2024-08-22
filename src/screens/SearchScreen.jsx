@@ -4,6 +4,9 @@ import { useState } from 'react';
 import { Dimensions, Image, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
 import { XMarkIcon } from 'react-native-heroicons/outline';
 import Loading from '../components/Loading';
+import { fallbackMoviePoster, fetchSearchedMovie, image185 } from '../../api/moviedb';
+import { useCallback } from 'react';
+import { debounce } from 'lodash';
 
 const { height, width } = Dimensions.get('window');
 
@@ -11,10 +14,30 @@ function SearchScreen() {
 
   const navigation = useNavigation();
 
-  const [results, setResults] = useState([1, 2, 3, 4]);
+  const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const movieName = 'Movie Name';
+
+  const searchMovie = (value) => {
+      if(value && value.length > 2) {
+        setLoading(true);
+        fetchSearchedMovie({
+          query: value,
+          include_adult: "false",
+          language: "en-US",
+          page: "1",
+        }).then(data => {
+          setLoading(false);
+          if(data && data.results) setResults(data.results)
+        });
+      }else {
+        setLoading(false);
+        setResults([])
+      }
+  }
+
+  const handleTextDebounce = useCallback(debounce(searchMovie, 400), [])
 
   return (
     <SafeAreaView style={{ backgroundColor: "#1F2937", flex: 1 }}>
@@ -23,6 +46,7 @@ function SearchScreen() {
           placeholder="Search Movie"
           placeholderTextColor="gray"
           style={styles.inputField}
+          onChangeText={handleTextDebounce}
         />
         <TouchableOpacity
           style={styles.close}
@@ -54,7 +78,7 @@ function SearchScreen() {
                 >
                   <View style={{ display: "flex", gap: 5 }}>
                     <Image
-                      source={require("../../assets/starwars.jpg")}
+                      source={{uri: image185(item?.poster_path)  || fallbackMoviePoster}}
                       style={styles.imageContainer}
                     />
                     <Text
@@ -64,9 +88,9 @@ function SearchScreen() {
                         marginBottom: 16,
                       }}
                     >
-                      {movieName.length > 20
-                        ? movieName.slice(0, 20) + "..."
-                        : movieName}
+                      {item.title.length > 20
+                        ? item.title.slice(0, 20) + "..."
+                        : item.title}
                     </Text>
                   </View>
                 </TouchableWithoutFeedback>

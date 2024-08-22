@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import React from 'react'
 import { useState } from 'react';
 import { Image } from 'react-native';
@@ -9,6 +9,7 @@ import { HeartIcon } from 'react-native-heroicons/solid';
 import MovieList from '../components/MovieList';
 import Loading from '../components/Loading';
 import { useEffect } from 'react';
+import { fallbackPersonImage, fetchPersonDetails, fetchPersonMovies, image342 } from '../../api/moviedb';
 
 const { height, width } = Dimensions.get('window');
 
@@ -23,12 +24,27 @@ function PersonScreen() {
     const navigation = useNavigation();
 
     const [favorite, setFavorite] = useState(false);
-    const [personMovies, setPersonMovies] = useState([1, 2, 3]);
+    const [personMovies, setPersonMovies] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [person, setPerson] = useState({});
 
     useEffect(() => {
-      
+      setLoading(true);
+      getPersonDetails(item.id);
+      getPersonMovies(item.id);
     }, [item])
+
+    const getPersonDetails = async (id) => {
+      const data = await fetchPersonDetails(id);
+      if (data) setPerson(data)
+      setLoading(false);
+    }
+
+    const getPersonMovies = async (id) => {
+      const data = await fetchPersonMovies(id);
+      if (data && data.cast) setPersonMovies(data.cast)
+      setLoading(false);
+    }
 
     return (
       <ScrollView style={styles.container}>
@@ -50,15 +66,16 @@ function PersonScreen() {
                 <View style={styles.imageResizer}>
                   <Image
                     style={styles.imageSize}
-                    source={require("../../assets/starwars.jpg")}
+                    // source={require("../../assets/starwars.jpg")}
+                    source={{uri: image342(person?.profile_path) || fallbackPersonImage}}
                   />
                 </View>
               </View>
             </View>
 
             <View style={styles.movieTitle}>
-              <Text style={styles.movieHeading}>{personName}</Text>
-              <Text style={{ color: "gray" }}>London, United Kingdom</Text>
+              <Text style={styles.movieHeading}>{person?.name}</Text>
+              <Text style={{ color: "gray" }}>{person?.place_of_birth}</Text>
             </View>
 
             <View style={styles.detailsContainer}>
@@ -72,7 +89,7 @@ function PersonScreen() {
                 <Text style={{ fontWeight: "bold", color: "#D1D5DB" }}>
                   Gender
                 </Text>
-                <Text style={{ color: "#D1D5DB" }}>Male</Text>
+                <Text style={{ color: "#D1D5DB" }}>{person?.gender==1 ? 'Female' : 'Male' }</Text>
               </View>
               <View
                 style={{
@@ -84,7 +101,7 @@ function PersonScreen() {
                 <Text style={{ fontWeight: "bold", color: "#D1D5DB" }}>
                   Birthday
                 </Text>
-                <Text style={{ color: "#D1D5DB" }}>2002-01-01</Text>
+                <Text style={{ color: "#D1D5DB" }}>{person?.birthday}</Text>
               </View>
               <View
                 style={{
@@ -96,13 +113,13 @@ function PersonScreen() {
                 <Text style={{ fontWeight: "bold", color: "#D1D5DB" }}>
                   Known For
                 </Text>
-                <Text style={{ color: "#D1D5DB" }}>Acting</Text>
+                <Text style={{ color: "#D1D5DB" }}>{person?.known_for_department}</Text>
               </View>
               <View style={{ paddingHorizontal: 16 }}>
                 <Text style={{ fontWeight: "bold", color: "#D1D5DB" }}>
                   Popularity
                 </Text>
-                <Text style={{ color: "#D1D5DB" }}>54,000</Text>
+                <Text style={{ color: "#D1D5DB" }}>{person?.popularity?.toFixed(2)} %</Text>
               </View>
             </View>
 
@@ -110,14 +127,7 @@ function PersonScreen() {
               <Text style={styles.bio}>Biography</Text>
 
               <Text style={styles.description}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Pellentesque sagittis neque vel nisi tincidunt, condimentum
-                maximus lorem volutpat. Class aptent taciti sociosqu ad litora
-                torquent per conubia nostra, per inceptos himenaeos. Sed et
-                tempus dolor. Aliquam sagittis varius bibendum. Integer ornare
-                mattis blandit. Sed semper vel ipsum eget bibendum. Integer
-                tempor arcu finibus neque lacinia placerat. Phasellus dictum
-                ligula eu sapien placerat elementum.
+                {person?.biography}
               </Text>
             </View>
 
